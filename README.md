@@ -1,188 +1,387 @@
 # VitaLens AI
 
-> **Multimodal Preventive Health Intelligence Platform**
-> Preventive. Accessible. Intelligent.
+> **AI-powered preventive health dashboard built with React**
 
-## 🌍 Overview
+VitaLens AI is a frontend healthcare application that combines browser-based vital estimation, voice symptom input, AI-assisted symptom analysis, health risk scoring, medication tracking, multilingual support, and AI-generated health summaries into a single dashboard.
 
-**VitaLens AI** is an AI-powered preventive healthcare platform designed to make health intelligence accessible to everyone using only a smartphone. The platform combines facial vital scanning, voice-based symptom analysis, AI disease prediction, medication tracking, and multilingual support into one unified digital health ecosystem. 
+The project was built to explore how modern web technologies and AI APIs can be combined to create an accessible preventive-health experience.
 
-Built for hackathons and scalable real-world healthcare deployment, VitaLens AI focuses on affordability, accessibility, and early intervention — especially for rural and underserved communities. 
-
----
-
-## 🚨 Problem Statement
-
-Healthcare systems worldwide still face major challenges:
-
-* Limited access to healthcare in rural and remote areas
-* Delayed diagnoses due to lack of early detection
-* No continuous health monitoring outside hospitals
-* Fragmented patient records and disconnected health data systems 
+> **Disclaimer:** VitaLens AI is a prototype for educational and demonstration purposes. The health readings and AI-generated information are not medical diagnoses and should not be used as a substitute for professional medical advice.
 
 ---
 
-## 💡 Solution
+## ✨ Features
 
-VitaLens AI transforms any smartphone into a preventive health assistant by integrating:
+### 📊 Health Dashboard
 
-* 📷 Facial vitals scanning using webcam-based rPPG
-* 🎙️ AI-powered voice symptom analysis and triage
-* 🧠 Disease risk prediction engine
-* 💬 AI healthcare advisory chatbot
-* 💊 Medication adherence tracking
-* 📄 Auto-generated doctor-ready reports
-* 🌐 Multilingual healthcare accessibility 
+A centralized dashboard provides an overview of:
 
----
-
-## ⚙️ Core Features
-
-### 1. Facial Vitals Scanner
-
-* Webcam-based remote photoplethysmography (rPPG)
-* Estimates:
-
-  * Heart Rate (HR)
-  * SpO2
-  * Stress levels
-* No wearable devices required 
-
-### 2. Voice Triage System
-
-* Speech-to-text symptom collection
-* AI-based triage scoring using NLP
-* Real-time health risk assessment 
-
-### 3. Disease Risk Prediction Engine
-
-* Predicts potential disease risks over the next 30 days
-* Generates prevention-focused recommendations
-* Risk scoring system from 0–100 
-
-### 4. AI Health Advisor
-
-* Powered by Gemini 1.5 Flash
-* Evidence-based healthcare guidance
-* Always-available conversational support 
-
-### 5. Medication Adherence Tracking
-
-* Smart medication reminders
-* Weekly adherence monitoring
-* Offline-capable tracking system 
-
-### 6. Auto PDF Doctor Reports
-
-* Generates doctor-ready health summaries
-* One-click downloadable reports
-* Easy sharing with healthcare professionals 
-
-### 7. Multilingual Support
-
-* Supports regional languages
-* Designed for rural accessibility
-* Includes Hindi, Telugu, Tamil, and more 
+* Heart-rate estimate
+* SpO₂ estimate
+* Health risk score
+* Stress estimate
+* Recent symptom information
+* Access to all major application modules
 
 ---
 
-## 🏗️ Architecture
+### 📷 Camera-Based Vital Estimation
 
-### Input Layer
+The application uses the browser's `MediaDevices` API to access the user's webcam.
 
-* Webcam Vitals Scan
-* Voice Symptom Input
-* Health History Form
-* Medication Schedule
+The camera module:
 
-### AI Processing Layer
+* Requests webcam permission
+* Captures frames from the camera
+* Samples pixel values through a hidden canvas
+* Calculates basic RGB statistics
+* Produces demo estimates for:
 
-* Arcee.ai
-* face-api.js (rPPG)
-* Web Speech API
-* Risk Scoring Engine
+  * Heart rate
+  * SpO₂
+  * Stress level
 
-### Output Layer
+The application clearly marks these values as **demo estimates and not for medical use**.
 
-* Live Health Dashboard
-* Risk Alerts & Triage
-* PDF Doctor Reports
-* Medication Reminders 
+---
+
+### 🎙️ Voice Symptom Reporter
+
+Users can describe their symptoms using their voice.
+
+The application uses the browser's Web Speech Recognition API to:
+
+1. Start microphone-based speech recognition
+2. Convert speech into text
+3. Display the transcript
+4. Send the symptom description for AI-assisted analysis
+5. Present a triage-style response and recommendations
+
+Users can also enter symptoms manually.
+
+---
+
+### 🧠 AI-Assisted Health Analysis
+
+VitaLens AI integrates external language-model APIs for conversational and symptom-related analysis.
+
+The current implementation:
+
+* Sends prompts to an AI model through the browser
+* Uses Anthropic as the primary AI provider
+* Falls back to OpenRouter when the primary request fails
+* Supports streaming responses for the AI advisor
+* Displays AI-generated health-related responses inside the application
+
+The OpenRouter fallback includes multiple model options such as Mistral, Llama, Gemma, and Qwen.
+
+---
+
+### 📈 Health Risk Scoring
+
+Users can provide a health profile containing information such as:
+
+* Age
+* Gender
+* BMI
+* Sleep
+* Exercise frequency
+* Smoking status
+* Family history
+* Recent symptoms
+
+The application uses this information to generate a health risk score and display:
+
+* Overall risk score
+* Risk factors
+* Prevention suggestions
+* A 30-day forecast-style view
+
+This is a **prototype risk-scoring feature**, not a clinically validated prediction model.
+
+---
+
+### 💊 Medication Tracking
+
+The medication module allows users to:
+
+* Add medications
+* Specify dosage
+* Set medication times
+* Track medication status
+* View adherence information
+
+The interface provides visual indicators for:
+
+* Taken
+* Partial
+* Missed
+* Upcoming
+
+---
+
+### 📄 AI Health Reports
+
+The application includes a report-generation module that creates an AI-assisted summary of the user's health information.
+
+The report interface provides:
+
+* Health information summary
+* AI-generated content
+* Report generation state
+* Download-oriented UI
+
+---
+
+### 🌐 Multilingual Interface
+
+The application includes multilingual UI support for:
+
+* English
+* Hindi
+* Telugu
+* Tamil
+
+The language system translates the application's interface labels and health-dashboard content between supported languages.
+
+---
+
+## 🏗️ Application Architecture
+
+```text
+                    ┌──────────────────────┐
+                    │       User           │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │   React Frontend     │
+                    │      VitaLens AI      │
+                    └──────────┬───────────┘
+                               │
+          ┌────────────────────┼────────────────────┐
+          │                    │                    │
+          ▼                    ▼                    ▼
+   ┌─────────────┐      ┌─────────────┐      ┌─────────────┐
+   │   Camera    │      │    Voice    │      │   Health    │
+   │   Module    │      │   Module    │      │   Profile   │
+   └──────┬──────┘      └──────┬──────┘      └──────┬──────┘
+          │                    │                    │
+          ▼                    ▼                    ▼
+   Pixel Analysis       Speech-to-Text       Risk Scoring
+          │                    │                    │
+          └────────────────────┼────────────────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │      AI Layer        │
+                    │ Anthropic / OpenRouter│
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │ Dashboard / Reports  │
+                    │ Medication Tracking  │
+                    └──────────────────────┘
+```
 
 ---
 
 ## 🛠️ Tech Stack
 
-* React.js
-* Firebase
-* Gemini 1.5 Flash
-* face-api.js
-* Web Speech API
-* jsPDF
-* MyMemory Translation API
-* Arcee.ai 
+### Frontend
+
+* React
+* JavaScript (ES Modules)
+* HTML5
+* CSS3
+* Vite
+
+### Browser APIs
+
+* MediaDevices API
+* Canvas API
+* Web Speech Recognition API
+* `requestAnimationFrame`
+
+### AI Integration
+
+* Anthropic API
+* OpenRouter API
+* Mistral models
+* Meta Llama models
+* Google Gemma models
+* Qwen models
+
+### Development Tools
+
+* Git
+* GitHub
+* VS Code
+* ESLint
+
+The repository's current `package.json` confirms React 19, ReactDOM, Vite, and ESLint as the project's declared dependencies/tooling.
 
 ---
 
-## 📈 Impact
+## 📁 Project Structure
 
-* 🌍 Accessible to **4.5B+ smartphone users**
-* 🏥 Potential **70% reduction in unnecessary clinic visits**
-* 🇮🇳 Designed for **500M+ rural Indian users**
-* 💸 Built with a **100% free technology stack** 
+```text
+VitaLens-AI/
+│
+├── public/
+│
+├── src/
+│   ├── assets/
+│   ├── App.jsx
+│   ├── App.css
+│   ├── index.css
+│   └── main.jsx
+│
+├── .gitignore
+├── eslint.config.js
+├── index.html
+├── package.json
+├── package-lock.json
+├── vite.config.js
+└── README.md
+```
 
----
-
-## 🏆 Competitive Advantage
-
-### ⚡ Live Demo Experience
-
-Real-time webcam vitals and instant AI symptom triage create a powerful interactive healthcare demo.
-
-### ✅ Complete Healthcare Coverage
-
-Addresses:
-
-* Smart monitoring
-* AI diagnostics
-* Digital healthcare platform
-* Intelligent health advisory
-
-### 🌍 Social Impact Focus
-
-Built specifically for affordable healthcare accessibility in rural and multilingual regions.
-
-### 🚀 Scalability
-
-Future expansion possibilities include:
-
-* IoT wearable integration
-* Hospital API connectivity
-* Insurance partnerships
-* Government healthcare schemes 
+The main application logic is currently organized in `src/App.jsx`, which contains the dashboard, vital scanner, voice symptom reporter, AI integration, multilingual strings, medication module, and other application components.
 
 ---
 
-## 🎯 Vision
+## 🚀 Getting Started
 
-VitaLens AI aligns with the WHO Universal Health Coverage vision by removing:
+### 1. Clone the repository
 
-* Financial barriers
-* Geographic barriers
-* Language barriers
+```bash
+git clone https://github.com/poojitha1116/VitaLens-AI.git
+```
 
-Making preventive healthcare intelligence accessible to everyone with a smartphone. 
+### 2. Navigate into the project
+
+```bash
+cd VitaLens-AI
+```
+
+### 3. Install dependencies
+
+```bash
+npm install
+```
+
+### 4. Start the development server
+
+```bash
+npm run dev
+```
+
+### 5. Open the local application
+
+Vite will provide a local development URL in the terminal.
 
 ---
 
-## 🚀 Future Enhancements
+## 🔐 API Configuration
 
-* Wearable device integration
-* Cloud health records
-* Advanced AI diagnostics
-* Telemedicine integration
-* Emergency alert systems
-* Predictive analytics using longitudinal health data
+The application currently contains client-side AI API integration.
+
+For a production application, API keys should **not** be exposed in frontend source code.
+
+A production-ready architecture should instead use:
+
+```text
+React Frontend
+      │
+      ▼
+Backend API
+      │
+      ├── Authentication
+      ├── Request Validation
+      ├── AI API Calls
+      └── Rate Limiting
+```
+
+This would protect credentials and provide better control over AI requests.
 
 ---
 
+## ⚠️ Current Limitations
+
+VitaLens AI is currently a prototype and has several limitations.
+
+### Camera-based readings
+
+The vital scanner uses simplified browser-side pixel analysis and generates demonstration estimates. It has not been clinically validated.
+
+### AI-generated information
+
+AI responses may be inaccurate or incomplete and should not be treated as medical advice.
+
+### Security
+
+AI API calls are currently implemented from the frontend. A production implementation should move sensitive API operations to a secure backend.
+
+### Data persistence
+
+The current repository is primarily a frontend prototype and does not currently contain a dedicated backend/database architecture.
+
+### Medical validation
+
+The risk scoring and vital estimation features have not undergone clinical validation.
+
+---
+
+## 🔮 Future Improvements
+
+* Build a dedicated Python/FastAPI backend
+* Add secure authentication and authorization
+* Move AI API calls to the backend
+* Add PostgreSQL/MongoDB persistence
+* Implement proper API endpoints
+* Replace prototype vital estimation with validated signal-processing methods
+* Add automated testing
+* Add proper model evaluation for risk prediction
+* Improve accessibility and responsive design
+* Deploy the frontend and backend
+* Add structured health-data storage
+* Add audit logging for AI requests
+
+---
+
+## 🎯 What I Learned
+
+Through this project, I worked with:
+
+* React component architecture
+* React state management
+* Browser APIs
+* Webcam and canvas processing
+* Speech recognition
+* AI API integration
+* Streaming AI responses
+* Multilingual UI design
+* Form handling
+* Health-dashboard UI design
+* Client-side application architecture
+
+---
+
+## ⚠️ Disclaimer
+
+VitaLens AI is an educational software prototype.
+
+It is **not a medical device**, does not provide medical diagnoses, and should not be used to make medical decisions.
+
+Always consult a qualified healthcare professional for medical advice.
+
+---
+
+## 👩‍💻 Author
+
+**PULAKANTI POOJITHA REDDY**
+
+Computer Science Undergraduate | Software Development | AI/ML
+
+GitHub: [@poojitha1116](https://github.com/poojitha1116)
